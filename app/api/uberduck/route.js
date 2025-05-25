@@ -14,7 +14,7 @@ export async function POST(req) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Token ${process.env.UBERDUCK_API_KEY}`
+        'Authorization': `Token ${process.env.UBERDUCK_API_KEY}
       },
       body: JSON.stringify({
         voice: voice,
