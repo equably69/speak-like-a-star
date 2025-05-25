@@ -12,11 +12,9 @@ export async function POST(req) {
     const response = await fetch('https://api.uberduck.ai/speak-synchronous', {
       method: 'POST',
       headers: {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-  'Authorization': `Bearer ${process.env.UBERDUCK_API_KEY}`
-},
-
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.UBERDUCK_API_KEY}`
       },
       body: JSON.stringify({
         voice: voice,
