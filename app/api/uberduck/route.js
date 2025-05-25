@@ -10,7 +10,7 @@ export async function POST(req) {
     const audioBase64 = Buffer.from(arrayBuffer).toString('base64');
 
     const basicAuth = Buffer.from(`${process.env.UBERDUCK_API_KEY}:`).toString('base64');
-
+    console.log("Chiave Uberduck usata:", process.env.UBERDUCK_API_KEY);
     const response = await fetch('https://api.uberduck.ai/speak-synchronous', {
       method: 'POST',
       headers: {
