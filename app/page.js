@@ -34,7 +34,7 @@ export default function Home() {
     setTimeout(() => {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-    }, 15000); // 15 secondi
+    }, 3000); // 3 secondi (sviluppo)
   };
 
   const transformToFener = async () => {
@@ -46,7 +46,7 @@ export default function Home() {
     try {
       const formData = new FormData();
       formData.append('audio', recordedBlobRef.current);
-      formData.append('voice', 'darth-vader-impression');
+      formData.append('voice', 'darth-vader');
 
       const res = await fetch('/api/uberduck', {
         method: 'POST',
@@ -54,7 +54,7 @@ export default function Home() {
       });
 
       const data = await res.json();
-      console.log('Uberduck response:', data);
+      console.log('RISPOSTA RAW DA UBERDUCK:', data);
 
       if (data.url) {
         setVoiceUrl(data.url);
@@ -73,7 +73,7 @@ export default function Home() {
       <div className="bg-gray-900 border border-red-600 rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
         <h1 className="text-3xl font-bold text-red-500 mb-2">🎙️ Speak Like a Star</h1>
         <p className="text-sm text-gray-300 mb-6">
-          Registra un vocale di 15 secondi, trasformalo con la voce di una celebrità e condividilo.
+          Registra un vocale di 3 secondi, trasformalo con la voce di una celebrità e condividilo.
         </p>
 
         <button
