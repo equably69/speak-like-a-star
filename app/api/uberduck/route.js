@@ -13,7 +13,7 @@ export async function POST(req) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Token INSERISCI_LA_TUA_API_KEY_QUI'
+      'Authorization': 'Token e20366b22280f8ed1aa8a684ac3a1be0914e77b9081968a1631820e447e369db2b295a0a5b70bf267d867dad3540f613'
     },
     body: JSON.stringify({
       voice,
