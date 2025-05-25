@@ -4,8 +4,10 @@ import { useState, useRef } from 'react';
 export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [voiceUrl, setVoiceUrl] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const recordedBlobRef = useRef(null);
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -18,6 +20,7 @@ export default function Home() {
 
     mediaRecorderRef.current.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+      recordedBlobRef.current = audioBlob;
       const url = URL.createObjectURL(audioBlob);
       setAudioUrl(url);
     };
@@ -29,6 +32,22 @@ export default function Home() {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
     }, 15000); // 15 secondi
+  };
+
+  const transformToFener = async () => {
+    if (!recordedBlobRef.current) return;
+
+    const formData = new FormData();
+    formData.append('audio', recordedBlobRef.current);
+    formData.append('voice', 'darth-vader-impression');
+
+    const res = await fetch('/api/uberduck', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await res.json();
+    if (data.url) setVoiceUrl(data.url);
   };
 
   return (
@@ -50,12 +69,23 @@ export default function Home() {
         </button>
 
         {audioUrl && (
-          <audio controls className="w-full mt-4" src={audioUrl}>
-            Il tuo browser non supporta l'elemento audio.
-          </audio>
+          <audio controls className="w-full mt-4" src={audioUrl} />
         )}
 
-        <p className="text-xs text-gray-500 mt-6">Versione Beta – Registrazione attiva</p>
+        {audioUrl && (
+          <button
+            onClick={transformToFener}
+            className="mt-4 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full w-full"
+          >
+            🖤 Trasforma in Darth Fener
+          </button>
+        )}
+
+        {voiceUrl && (
+          <audio controls className="w-full mt-4" src={voiceUrl} />
+        )}
+
+        <p className="text-xs text-gray-500 mt-6">Versione Beta – Voice cloning attivo</p>
       </div>
     </main>
   );
