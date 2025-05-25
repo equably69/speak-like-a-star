@@ -23,7 +23,7 @@ export async function POST(req) {
       })
     });
 
-        const result = await response.json();
+    const result = await response.json();
     console.log('RISPOSTA RAW DA UBERDUCK:', result);
 
     if (result.path) {
@@ -31,5 +31,8 @@ export async function POST(req) {
     } else {
       return NextResponse.json({ error: JSON.stringify(result) }, { status: 500 });
     }
-
+  } catch (err) {
+    console.error('Errore server:', err);
+    return NextResponse.json({ error: 'Errore server: ' + err.message }, { status: 500 });
+  }
 }
