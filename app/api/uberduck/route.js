@@ -4,7 +4,7 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
     const audioBlob = formData.get('audio');
-    const voice = formData.get('voice') || 'darth-vader-impression';
+    const voice = formData.get('voice') || 'darth-vader';
 
     const arrayBuffer = await audioBlob.arrayBuffer();
     const audioBase64 = Buffer.from(arrayBuffer).toString('base64');
@@ -14,7 +14,7 @@ export async function POST(req) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Token e20366b22280f8ed1aa8a684ac3a1be0914e77b9081968a1631820e447e369db2b295a0a5b70bf267d867dad3540f613'
+        'Authorization': `Token ${process.env.UBERDUCK_API_KEY}`
       },
       body: JSON.stringify({
         voice: voice,
