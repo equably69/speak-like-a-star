@@ -14,7 +14,8 @@ export async function POST(req) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'f5989382780e6e549cca5780436568ede9f518fb7c3a158dfdcfb5543279dc714ca1ece6fdba29ff739ee76057dc2e8c'
+        'Authorization': 'f5989382780e6e549cca5780436568ede9'Authorization': `Bearer ${process.env.UBERDUCK_API_KEY}`
+f518fb7c3a158dfdcfb5543279dc714ca1ece6fdba29ff739ee76057dc2e8c'
 
       },
       body: JSON.stringify({
