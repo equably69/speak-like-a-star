@@ -5,6 +5,9 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [voiceUrl, setVoiceUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordedBlobRef = useRef(null);
@@ -36,18 +39,33 @@ export default function Home() {
 
   const transformToFener = async () => {
     if (!recordedBlobRef.current) return;
+    setLoading(true);
+    setError(null);
+    setVoiceUrl(null);
 
-    const formData = new FormData();
-    formData.append('audio', recordedBlobRef.current);
-    formData.append('voice', 'darth-vader-impression');
+    try {
+      const formData = new FormData();
+      formData.append('audio', recordedBlobRef.current);
+      formData.append('voice', 'darth-vader-impression');
 
-    const res = await fetch('/api/uberduck', {
-      method: 'POST',
-      body: formData
-    });
+      const res = await fetch('/api/uberduck', {
+        method: 'POST',
+        body: formData
+      });
 
-    const data = await res.json();
-    if (data.url) setVoiceUrl(data.url);
+      const data = await res.json();
+      console.log('Uberduck response:', data);
+
+      if (data.url) {
+        setVoiceUrl(data.url);
+      } else {
+        setError('Errore nella risposta da Uberduck.');
+      }
+    } catch (err) {
+      setError('Errore durante la richiesta: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,10 +93,15 @@ export default function Home() {
         {audioUrl && (
           <button
             onClick={transformToFener}
-            className="mt-4 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full w-full"
+            className="mt-4 bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full w-full disabled:opacity-50"
+            disabled={loading}
           >
-            🖤 Trasforma in Darth Fener
+            {loading ? '🛠️ Trasformazione in corso...' : '🖤 Trasforma in Darth Fener'}
           </button>
+        )}
+
+        {error && (
+          <p className="text-sm text-red-400 mt-4">{error}</p>
         )}
 
         {voiceUrl && (
