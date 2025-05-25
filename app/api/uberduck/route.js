@@ -23,16 +23,13 @@ export async function POST(req) {
       })
     });
 
-    const result = await response.json();
-    console.log('Risposta Uberduck:', result);
+        const result = await response.json();
+    console.log('RISPOSTA RAW DA UBERDUCK:', result);
 
     if (result.path) {
       return NextResponse.json({ url: `https://storage.googleapis.com/uberduck-audio/${result.path}` });
     } else {
-      return NextResponse.json({ error: result.error || 'Errore sconosciuto da Uberduck' }, { status: 500 });
+      return NextResponse.json({ error: JSON.stringify(result) }, { status: 500 });
     }
-  } catch (err) {
-    console.error('Errore server:', err);
-    return NextResponse.json({ error: 'Errore server: ' + err.message }, { status: 500 });
-  }
+
 }
